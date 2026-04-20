@@ -1,0 +1,6 @@
+{
+  "name": "Mindfulness — Οδηγός για Νευροδιαφορετικούς",
+  "description": "Δωρεάν, trauma-informed, δίγλωσσος οδηγός ενσυνειδητότητας σχεδιασμένος για νευροδιαφορετικούς. Σώμα, Αναπνοή, Προσοχή, Χώρος.",
+  "requestFramePermissions": ["notifications"],
+  "majorCapabilities": []
+}
