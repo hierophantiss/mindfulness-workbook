@@ -7,57 +7,48 @@ function buildFocusMusic() {
   var ac = getAC();
   var master = ac.createGain();
   master.gain.value = 0;
-  master.connect(ac.destination);
+  
+  // Neural Entrainment — 12Hz Beta/High Alpha Pulse for Focus
+  var pulse = createPulse(ac, 12);
+  var pulseGain = ac.createGain();
+  pulseGain.gain.value = 1.0;
+  pulse.connect(pulseGain.gain);
+  master.connect(pulseGain);
+  pulseGain.connect(ac.destination);
 
-  // Delay reverb for spaciousness
-  var del1 = ac.createDelay(1); del1.delayTime.value = 0.25;
-  var dg1 = ac.createGain(); dg1.gain.value = 0.18;
-  var del2 = ac.createDelay(1); del2.delayTime.value = 0.5;
-  var dg2 = ac.createGain(); dg2.gain.value = 0.1;
-  master.connect(del1).connect(dg1).connect(ac.destination);
-  master.connect(del2).connect(dg2).connect(ac.destination);
-  dg1.connect(del2); dg2.connect(del1);
+  // Focus Spatializer
+  var panner = ac.createStereoPanner();
+  applySpatialMovement({ ac: ac }, panner, 0.15);
+  
+  // High-Quality Reverb + Limiter
+  var reverb = ac.createConvolver();
+  reverb.buffer = createImpulseResponse(ac, 3, 2);
+  var rMix = ac.createGain(); rMix.gain.value = 0.3;
+  var limiter = createLimiter(ac);
+
+  pulseGain.connect(panner);
+  panner.connect(limiter);
+  panner.connect(reverb).connect(rMix).connect(limiter);
+  limiter.connect(ac.destination);
 
   // Warm bass — soft sine, slow subtle movement
   var bassOsc = ac.createOscillator(); bassOsc.type = 'sine';
   bassOsc.frequency.value = 65.4; // C2
-  var bassG = ac.createGain(); bassG.gain.value = 0.07;
+  var bassG = ac.createGain(); bassG.gain.value = 0.08;
   bassOsc.connect(bassG).connect(master);
   bassOsc.start();
 
-  // Soft pad — triangle waves, Cmaj7 spread across octaves, very quiet
-  var padG = ac.createGain(); padG.gain.value = 0.025;
+  // Soft pad — triangle waves, Cmaj7 spread across octaves
+  var padG = ac.createGain(); padG.gain.value = 0.035;
   [130.81, 164.81, 196.0, 246.94, 329.6].forEach(function(f) {
     var o = ac.createOscillator(); o.type = 'triangle';
     o.frequency.value = f;
-    o.detune.value = (Math.random() - 0.5) * 8;
+    o.detune.value = (Math.random() - 0.5) * 12;
     o.connect(padG); o.start();
   });
   padG.connect(master);
 
-  // Alpha AM modulation (10 Hz) on pink noise carrier — neural phase locking
-  // Works without headphones; reinforces focus/flow state
-  var focusAMLFO  = ac.createOscillator(); focusAMLFO.type = 'sine';
-  focusAMLFO.frequency.value = 10;
-  var focusAMMod  = ac.createGain(); focusAMMod.gain.value = 0.20;
-  var focusAMDC   = ac.createGain(); focusAMDC.gain.value  = 0.80;
-  focusAMLFO.connect(focusAMMod); focusAMMod.connect(focusAMDC.gain);
-  var focusAMNoise = ac.createBufferSource();
-  focusAMNoise.buffer = makePinkNoise(ac); focusAMNoise.loop = true;
-  var focusAMBP   = ac.createBiquadFilter(); focusAMBP.type = 'bandpass';
-  focusAMBP.frequency.value = 330; focusAMBP.Q.value = 0.9;
-  var focusAMOut  = ac.createGain(); focusAMOut.gain.value = 0.18;
-  focusAMNoise.connect(focusAMBP).connect(focusAMDC).connect(focusAMOut).connect(master);
-  focusAMLFO.start(); focusAMNoise.start();
-
-  // Habituation prevention — drift AM freq ±1.5 Hz every 8 min
-  var focusDriftInterval = setInterval(function() {
-    if (!focusOn) { clearInterval(focusDriftInterval); return; }
-    var newF = 10 + (Math.random() * 2 - 1) * 1.5; // 8.5–11.5 Hz
-    focusAMLFO.frequency.linearRampToValueAtTime(newF, ac.currentTime + 30);
-  }, 8 * 60 * 1000);
-
-  return { master: master, ac: ac, driftInterval: focusDriftInterval };
+  return { master: master, ac: ac, panner: panner };
 }
 
 // Melodic notes — pentatonic C major across 3 octaves
@@ -139,7 +130,6 @@ function toggleFocus() {
     btn.classList.remove('active');
     icon.textContent = '♪';
     if (focusArpInterval) { clearTimeout(focusArpInterval); focusArpInterval = null; }
-    if (focusNodes.driftInterval) { clearInterval(focusNodes.driftInterval); }
   }
 }
 
