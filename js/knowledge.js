@@ -675,5 +675,50 @@ var KNOWLEDGE_FAQ = {
         relatedConcept: 'neuroplasticity'
       }
     ]
+  },
+  // ═══════════════════════════════════════════
+  // ΠΡΟΓΡΑΜΜΑ 8 ΕΒΔΟΜΑΔΩΝ — 8-Week Program
+  // ═══════════════════════════════════════════
+  '8week': {
+    el: [
+      {
+        q: 'Τι είναι το Πρόγραμμα 8 Εβδομάδων;',
+        a: 'Είναι μια δομημένη διαδρομή για να εντάξεις την ενσυνειδητότητα στη ζωή σου. Κάθε εβδομάδα εστιάζει σε έναν άξονα (Σώμα, Αναπνοή, Προσοχή, Χώρος) με καθημερινές μικρές ασκήσεις 5-15 λεπτών. Είναι σχεδιασμένο για να χτίσει τη συνήθεια χωρίς πίεση.',
+        tags: ['8week', 'basics', 'program'],
+        depth: 1
+      },
+      {
+        q: 'Πόσο χρόνο χρειάζεται την ημέρα;',
+        a: 'Οι περισσότερες ημέρες απαιτούν μόνο 5 έως 15 λεπτά. Η συνέπεια (κάθε μέρα λίγο) είναι πολύ πιο σημαντική από τη διάρκεια. Αν χάσεις μια μέρα, μην ανησυχείς — απλά συνέχισε από εκεί που σταμάτησες.',
+        tags: ['8week', 'time', 'consistency'],
+        depth: 1
+      },
+      {
+        q: 'Μπορώ να πάω πιο γρήγορα ή πιο αργά;',
+        a: 'Φυσικά. Το πρόγραμμα είναι δικό σου. Αν νιώθεις ότι μια εβδομάδα χρειάζεται περισσότερο χρόνο, μείνε εκεί. Αν νιώθεις έτοιμος, προχώρα. Ο στόχος δεν είναι η ταχύτητα, αλλά η ενσωμάτωση στον δικό σου ρυθμό.',
+        tags: ['8week', 'pace', 'flexibility'],
+        depth: 1
+      }
+    ],
+    en: [
+      {
+        q: 'What is the 8-Week Program?',
+        a: 'It is a structured path to integrate mindfulness into your life. Each week focuses on one axis (Body, Breath, Attention, Space) with daily small exercises of 5-15 minutes. It is designed to build the habit without pressure.',
+        tags: ['8week', 'basics', 'program'],
+        depth: 1
+      },
+      {
+        q: 'How much time does it take daily?',
+        a: 'Most days require only 5 to 15 minutes. Consistency (a little every day) is much more important than duration. If you miss a day, don\'t worry — just continue from where you left off.',
+        tags: ['8week', 'time', 'consistency'],
+        depth: 1
+      },
+      {
+        q: 'Can I go faster or slower?',
+        a: 'Of course. The program is yours. If you feel a week needs more time, stay there. If you feel ready, move forward. The goal is not speed, but integration at your own pace.',
+        tags: ['8week', 'pace', 'flexibility'],
+        depth: 1
+      }
+    ]
   }
 };

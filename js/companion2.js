@@ -119,8 +119,6 @@ function c2ShowMainMenu() {
     html += `<div class="c2-menu">
             ${c2MenuBtn('💭', lang === 'el' ? 'Πώς νιώθεις;' : 'How do you feel?', 'moodCheck')}
             ${c2MenuBtn('🧭', lang === 'el' ? 'Τι να κάνω;' : 'What to do?', 'smartHub')}
-            ${c2MenuBtn('🔍', lang === 'el' ? 'Εγκυκλοπαίδεια' : 'Encyclopedia', 'conceptExplore')}
-            ${c2MenuBtn('📂', lang === 'el' ? 'Ιστορικό / Σημειώσεις' : 'History / Notes', 'historyView')}
         </div>`;
     c2SetContent(html);
 }

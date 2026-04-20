@@ -17,9 +17,18 @@ function recordSession(minutes) {
   const today = new Date().toDateString();
   stats.sessions++;
   stats.minutes += minutes;
+  
+  if (!stats.dailyCount) stats.dailyCount = { date: '', count: 0 };
+  if (stats.dailyCount.date !== today) {
+    stats.dailyCount.date = today;
+    stats.dailyCount.count = 1;
+  } else {
+    stats.dailyCount.count++;
+  }
+
   if (stats.lastDate !== today) {
     const yesterday = new Date(Date.now() - 86400000).toDateString();
-    stats.streak = (stats.streak || 0) + (stats.lastDate !== today ? 1 : 0);
+    stats.streak = (stats.streak || 0) + (stats.lastDate === yesterday ? 1 : 1); // Simple bounce back or count
     stats.lastDate = today;
   }
   saveStats(stats);

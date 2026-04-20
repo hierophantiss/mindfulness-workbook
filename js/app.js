@@ -271,4 +271,15 @@ function updateQuote() {
   quoteInterval = setInterval(show, 6000);
 }
 
-// ═══ BUILD SCREENS ═══
+// ═══ INITIALIZATION ═══
+window.addEventListener('DOMContentLoaded', () => {
+  // If onboarding was already seen, initialize screen immediately
+  if (localStorage.getItem('onboarding_seen') === '1') {
+    setLang(LANG || 'el');
+    showScreen('home');
+  } else {
+    // Onboarding will handle initialization if not seen yet
+    // but we set a default lang just in case
+    setLang(LANG || 'el');
+  }
+});
