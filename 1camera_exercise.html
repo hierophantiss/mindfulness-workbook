@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Άσκηση Κάμερας — Παρουσία & Τετραπλός Άξονας | Camera Exercise with Presence Hero</title>
+<meta name="description" content="Interactive camera exercise using the Fourfold Axis hero. Zoom, wide, focused gaze and open awareness — the phone is held in front of the face, not above the head.">
+<link rel="canonical" href="https://mindfulness-practice.site/camera_exercise.html">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;1,300&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#050510;overflow:hidden;height:100vh;width:100vw;font-family:'Fraunces',serif;color:#e8e4df;user-select:none}
+  canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1}
+  .sub-box{position:fixed;bottom:50px;left:50%;transform:translateX(-50%);z-index:10;text-align:center;width:90%;max-width:530px;opacity:0;transition:opacity 1.5s ease;background:rgba(5,5,16,0.6);backdrop-filter:blur(6px);border-radius:20px;padding:12px 16px;border:1px solid rgba(232,228,223,0.08);pointer-events:none}
+  .sub-box.vis{opacity:1}
+  .sub-box .stag{font-size:clamp(0.5rem,0.9vw,0.65rem);letter-spacing:0.3em;text-transform:uppercase;color:rgba(200,180,120,0.65);margin-bottom:5px}
+  .sub-box .main{font-size:clamp(0.7rem,1.4vw,0.9rem);font-weight:400;letter-spacing:0.06em;color:rgba(232,228,223,0.8);line-height:1.7;font-style:italic}
+  .sub-box .sci{font-size:clamp(0.45rem,0.8vw,0.55rem);color:rgba(140,200,180,0.5);margin-top:8px;line-height:1.5}
+  .eng-banner{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:20;
+    background:rgba(10,20,25,0.85);
+    backdrop-filter:blur(4px);
+    border-radius:20px;
+    padding:10px 20px;
+    max-width:85%;
+    text-align:center;
+    font-family:'Fraunces',serif;
+    font-size:clamp(0.8rem,2.5vw,1rem);
+    font-weight:400;
+    letter-spacing:0.02em;
+    color:#f0f0e8;
+    border-left:3px solid #c8922a;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    opacity:0;
+    transition:opacity 1.5s ease;
+    pointer-events:none;
+    line-height:1.5;
+  }
+  .eng-banner.vis{opacity:1}
+  .snum{position:fixed;top:20px;right:24px;z-index:10;font-size:0.6rem;letter-spacing:0.3em;color:rgba(232,228,223,0.12)}
+  .ptrack{position:fixed;bottom:0;left:0;width:100%;height:2px;background:rgba(255,255,255,0.03);z-index:10}
+  .pbar{height:100%;background:linear-gradient(90deg,rgba(200,160,80,0.5),rgba(100,180,150,0.5));transition:width 1s ease}
+  .dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:10;display:flex;flex-direction:column;gap:12px}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(232,228,223,0.1);transition:all .4s ease;cursor:pointer;border:none;padding:0;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .dot.active{background:rgba(232,228,223,0.55);transform:scale(1.2)}
+  .ctrls{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:8px}
+  .ctrls button{background:rgba(232,228,223,0.06);border:1.5px solid rgba(232,228,223,0.15);color:rgba(232,228,223,0.5);padding:10px 22px;font-family:'Fraunces',serif;font-size:clamp(0.75rem,1.5vw,0.9rem);letter-spacing:0.12em;cursor:pointer;border-radius:28px;transition:all .3s;min-width:48px;min-height:44px}
+  .ctrls button:active{background:rgba(232,228,223,0.18);transform:scale(0.96)}
+  .intro{position:fixed;inset:0;z-index:100;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 2s ease}
+  .intro.hidden{opacity:0;pointer-events:none}
+  .intro-t{font-size:clamp(1.4rem,4vw,2.4rem);font-weight:300;letter-spacing:0.2em;background:linear-gradient(135deg,#e8e4df,#c8a860);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:fi 2s ease 0.5s forwards}
+  .intro-s{font-size:clamp(0.6rem,1.1vw,0.8rem);letter-spacing:0.3em;color:rgba(232,228,223,0.22);margin-top:8px;font-style:italic;opacity:0;animation:fi 2s ease 1.2s forwards}
+  .intro-h{position:absolute;bottom:clamp(40px,8vh,80px);left:50%;transform:translateX(-50%);font-size:clamp(0.85rem,2vw,1.1rem);letter-spacing:0.3em;color:rgba(232,228,223,0.55);text-transform:uppercase;cursor:pointer;padding:14px 36px;border:1.5px solid rgba(232,228,223,0.2);border-radius:30px;background:rgba(232,228,223,0.04);backdrop-filter:blur(4px);transition:all 0.3s;animation:pu 3s ease-in-out infinite;white-space:nowrap}
+  .intro-h:active{background:rgba(232,228,223,0.12);transform:translateX(-50%) scale(0.96)}
+  @keyframes fi{to{opacity:1}}
+  @keyframes pu{0%,100%{opacity:0.1}50%{opacity:0.3}}
+</style>
+</head>
+<body>
+<div class="intro" id="intro">
+  <div class="intro-t">Άσκηση Κάμερας</div>
+  <div class="intro-s">Zoom · Wide · Εστίαση · Ανοιχτή Προσοχή</div>
+  <div class="intro-h">πάτησε για να ξεκινήσεις</div>
+</div>
+<canvas id="c"></canvas>
+<div class="sub-box" id="sub"><div class="stag" id="stag"></div><div class="main" id="msub"></div><div class="sci" id="ssci"></div></div>
+<div class="eng-banner" id="engBanner"></div>
+<div class="snum" id="sn"></div>
+<div class="ptrack"><div class="pbar" id="pb"></div></div>
+<div class="dots" id="dotsC"></div>
+<div class="ctrls"><button onclick="goTo(cur-1)" aria-label="Previous">◀</button><button id="ab" onclick="togAuto()">▶ auto</button><button onclick="goTo(cur+1)" aria-label="Next">▶</button></div>
+
+<script>
+// ======================== CAMERA EXERCISE WITH JOURNEY HERO ========================
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let W, H, cx, cy;
+let time = 0, globalAlpha = 0;
+let cur = 0, tgt = 0, tT = 0, trans = false;
+let autoP = false, autoTm = null;
+let lastTimestamp = 0;
+
+// Scene definitions (bilingual)
+const SCENES = [
+  { tag: 'Σκηνή 1 · Zoom In', tag_en: 'Scene 1 · Zoom In',
+    sub: 'Κράτα το τηλέφωνο μπροστά σου — κάνε zoom.\nΤο σώμα σου δεν είναι σταθερό τρίποδο.\nΠαρατήρησε πόσο τρέμει η εικόνα.',
+    sub_en: 'Hold your phone in front of you — zoom in.\nYour body is not a stable tripod.\nNotice how much the image shakes.',
+    sci: '📷 Η στενή εστίαση αυξάνει τη σωματική αστάθεια — το zoom μεγεθύνει κάθε μικροκίνηση (Woollacott, 2002).',
+    sci_en: '📷 Narrow focus increases postural sway — zoom amplifies every micro-movement (Woollacott, 2002).',
+    bg: [28,20,30], zoomLabel: '5x', shake: 4.2, showAxis: false, focusMode: false, openMode: false, phoneScale: 1.8 },
+  { tag: 'Σκηνή 2 · Ultra Wide', tag_en: 'Scene 2 · Ultra Wide',
+    sub: 'Βάλε ultra wide — ανοιχτό πλάνο.\nΤο σώμα ακόμα δεν είναι σταθερό τρίποδο.\nΌμως η εικόνα είναι πολύ πιο σταθερή!',
+    sub_en: 'Switch to ultra wide — open frame.\nYour body is still not a stable tripod.\nBut the image looks much more stable!',
+    sci: '📐 Η ευρεία όραση μειώνει τη φαινόμενη αστάθεια — η ίδια κίνηση γίνεται αόρατη σε ευρύ πλάνο.',
+    sci_en: '📐 Wide vision reduces apparent instability — same movement becomes invisible in wide frame.',
+    bg: [18,25,32], zoomLabel: '0.5x', shake: 2.8, showAxis: false, focusMode: false, openMode: false, phoneScale: 0.7 },
+  { tag: 'Σκηνή 3 · Εστιασμένο Βλέμμα', tag_en: 'Scene 3 · Focused Gaze',
+    sub: 'Άνοιξε και λύγισε λίγο τα γόνατα.\nΣτάσου όρθιος — βρες τον άξονα της βαρύτητας.\nΑυτός ο άξονας είναι το σέλφι στικ και το τρίτο πόδι του τρίποδου.\nΤα πόδια μαζί με τη λεκάνη ρυθμίζουν την ισορροπία.\nΕστίασε το βλέμμα σε ένα σημείο.',
+    sub_en: 'Open and slightly bend your knees.\nStand upright — find your gravity axis.\nThis axis is the selfie stick and the third leg of the tripod.\nFeet together with the pelvis regulate balance.\nFocus your gaze on a single point.',
+    sci: '🧠 Η εστιασμένη προσοχή ενεργοποιεί ACC — η σταθερότητα αυξάνεται με σταθερή βάση (Woollacott, 2002).',
+    sci_en: '🧠 Focused attention activates ACC — stability improves with a stable base (Woollacott, 2002).',
+    bg: [20,28,25], zoomLabel: '1x', shake: 1.2, showAxis: true, focusMode: true, openMode: false, phoneScale: 1.0 },
+  { tag: 'Σκηνή 4 · Ανοιχτή Προσοχή', tag_en: 'Scene 4 · Open Awareness',
+    sub: 'Μείνε όρθιος, γόνατα ελαφρώς λυγισμένα.\nΜαλάκωσε το βλέμμα — άφησε το πεδίο να ανοίξει.\nΌραση, ακοή, αίσθηση — χωρίς εστίαση.\nΟ άξονας βαρύτητας στο κέντρο του κεφαλιού.\nΕίσαι ο χώρος που αντιλαμβάνεται.',
+    sub_en: 'Stay upright, knees slightly bent.\nSoften your gaze — let the field open.\nVision, hearing, sensation — without focus.\nThe gravity axis at the center of the head.\nYou are the space that perceives.',
+    sci: '🧘 Η ανοιχτή προσοχή παράγει συγχρονισμένα κύματα Άλφα (Fehmi, 2007) — χαλαρή εγρήγορση.',
+    sci_en: '🧘 Open attention produces synchronized Alpha waves across hemispheres (Fehmi, 2007) — relaxed alertness.',
+    bg: [12,30,22], zoomLabel: '1x', shake: 0.9, showAxis: true, focusMode: false, openMode: true, phoneScale: 1.0 }
+];
+const N = SCENES.length;
+
+// ======================== JOURNEY HERO DRAWING (standing adaptation with phone in front of face) ========================
+// A richly detailed figure inspired by journey.html, with hood, robes, third eye, aura, and hands holding phone at face level
+function drawJourneyHero(x, y, alpha, sceneParams) {
+  if (alpha <= 0) return;
+  const { zoomLabel, shake, showAxis, focusMode, openMode, phoneScale } = sceneParams;
+  const pulse = 0.5 + 0.5 * Math.sin(time * 1.8);
+  const breath = 0.5 + 0.5 * Math.sin(time * 0.9);
+  const shakeX = Math.sin(time * 5.3) * shake * 1.2;
+  const shakeY = Math.cos(time * 4.7) * shake * 0.8;
+  const rot = Math.sin(time * 4.2) * shake * 0.008;
+  
+  ctx.save();
+  ctx.translate(x + shakeX, y + shakeY);
+  ctx.rotate(rot);
+  
+  // ----- Ground shadow (soft) -----
+  ctx.fillStyle = `rgba(20,25,35,${alpha * 0.25})`;
+  ctx.beginPath(); ctx.ellipse(0, 68, 70 + pulse * 6, 12 + pulse * 2, 0, 0, Math.PI * 2); ctx.fill();
+  
+  // ----- Gravity axis (if active) -----
+  if (showAxis) {
+    const axisTop = -148, axisBot = 70;
+    const gradAxis = ctx.createLinearGradient(0, axisTop, 0, axisBot);
+    gradAxis.addColorStop(0, `rgba(210,80,70,0)`);
+    gradAxis.addColorStop(0.15, `rgba(210,80,70,${alpha * 0.5})`);
+    gradAxis.addColorStop(0.5, `rgba(210,80,70,${alpha * 0.85})`);
+    gradAxis.addColorStop(0.85, `rgba(210,80,70,${alpha * 0.5})`);
+    gradAxis.addColorStop(1, `rgba(210,80,70,0)`);
+    ctx.strokeStyle = gradAxis; ctx.lineWidth = 2.8;
+    ctx.beginPath(); ctx.moveTo(0, axisTop); ctx.lineTo(0, axisBot); ctx.stroke();
+    ctx.strokeStyle = `rgba(210,80,70,${alpha * 0.1})`; ctx.lineWidth = 14;
+    ctx.beginPath(); ctx.moveTo(0, axisTop); ctx.lineTo(0, axisBot); ctx.stroke();
+  }
+  
+  // ----- Robe & Torso (standing) -----
+  const robeTop = -82, chestY = -48, waistY = 30;
+  const robeGrad = ctx.createLinearGradient(-28, robeTop, 28, waistY);
+  robeGrad.addColorStop(0, `rgba(48,72,65,${alpha * 0.92})`);
+  robeGrad.addColorStop(0.5, `rgba(68,98,84,${alpha * 0.92})`);
+  robeGrad.addColorStop(1, `rgba(42,65,58,${alpha * 0.92})`);
+  ctx.fillStyle = robeGrad;
+  ctx.beginPath();
+  ctx.moveTo(-24, waistY);
+  ctx.quadraticCurveTo(-28, chestY, -26, robeTop);
+  ctx.lineTo(-22, robeTop - 18);
+  ctx.lineTo(22, robeTop - 18);
+  ctx.lineTo(26, robeTop);
+  ctx.quadraticCurveTo(28, chestY, 24, waistY);
+  ctx.closePath(); ctx.fill();
+  // Side shadow
+  ctx.fillStyle = `rgba(20,35,28,${alpha * 0.25})`;
+  ctx.beginPath(); ctx.moveTo(12, robeTop - 12); ctx.lineTo(22, robeTop - 12); ctx.lineTo(26, robeTop); ctx.quadraticCurveTo(28, chestY, 24, waistY); ctx.lineTo(12, waistY); ctx.fill();
+  // Belt / folds
+  ctx.strokeStyle = `rgba(180,200,185,${alpha * 0.12})`; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(-16, robeTop - 6); ctx.quadraticCurveTo(-8, chestY - 5, -6, chestY + 6); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(16, robeTop - 6); ctx.quadraticCurveTo(8, chestY - 5, 6, chestY + 6); ctx.stroke();
+  
+  // Legs (simple but elegant under robe)
+  ctx.fillStyle = `rgba(35,55,48,${alpha * 0.85})`;
+  ctx.beginPath(); ctx.moveTo(-18, waistY); ctx.lineTo(-28, 70); ctx.lineTo(-12, 70); ctx.lineTo(-10, waistY); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(18, waistY); ctx.lineTo(28, 70); ctx.lineTo(12, 70); ctx.lineTo(10, waistY); ctx.fill();
+  
+  // ----- Hood & Head -----
+  const headY = robeTop - 32, headR = 17;
+  const hoodGrad = ctx.createLinearGradient(-26, headY - 10, 26, headY + 15);
+  hoodGrad.addColorStop(0, `rgba(50,72,65,${alpha * 0.88})`);
+  hoodGrad.addColorStop(1, `rgba(45,68,60,${alpha * 0.88})`);
+  ctx.fillStyle = hoodGrad;
+  ctx.beginPath();
+  ctx.moveTo(-24, robeTop - 6);
+  ctx.quadraticCurveTo(-26, headY - 2, -22, headY - 12);
+  ctx.quadraticCurveTo(-16, headY - 22, 0, headY - 26);
+  ctx.quadraticCurveTo(16, headY - 22, 22, headY - 12);
+  ctx.quadraticCurveTo(26, headY - 2, 24, robeTop - 6);
+  ctx.fill();
+  
+  // Face
+  const faceGrad = ctx.createRadialGradient(-3, headY - 2, 2, 0, headY, headR);
+  faceGrad.addColorStop(0, `rgba(230,200,155,${alpha * 0.82})`);
+  faceGrad.addColorStop(0.7, `rgba(200,170,120,${alpha * 0.75})`);
+  faceGrad.addColorStop(1, `rgba(160,125,80,${alpha * 0.65})`);
+  ctx.fillStyle = faceGrad;
+  ctx.beginPath(); ctx.arc(0, headY, headR - 2, -0.3, Math.PI + 0.3); ctx.fill();
+  
+  // Eyes (focus / open modes)
+  if (focusMode) {
+    ctx.fillStyle = `rgba(210,200,185,${alpha * 0.65})`;
+    ctx.beginPath(); ctx.arc(-6, headY - 2, 2.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(6, headY - 2, 2.5, 0, Math.PI * 2); ctx.fill();
+    // Focus beam lines to ground point
+    const tgtX = 0, tgtY = 95;
+    ctx.strokeStyle = `rgba(220,200,100,${alpha * 0.3})`; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(-6, headY - 2); ctx.lineTo(tgtX, tgtY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(6, headY - 2); ctx.lineTo(tgtX, tgtY); ctx.stroke();
+    const fp = Math.sin(time * 2.2) * 0.5 + 0.5;
+    const glowFocus = ctx.createRadialGradient(tgtX, tgtY, 0, tgtX, tgtY, 12 + fp * 4);
+    glowFocus.addColorStop(0, `rgba(240,220,100,${alpha * 0.35})`);
+    glowFocus.addColorStop(1, 'rgba(240,220,100,0)');
+    ctx.fillStyle = glowFocus; ctx.beginPath(); ctx.arc(tgtX, tgtY, 12 + fp * 4, 0, Math.PI * 2); ctx.fill();
+  } 
+  else if (openMode) {
+    ctx.strokeStyle = `rgba(210,200,185,${alpha * 0.45})`; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(-9, headY - 1); ctx.quadraticCurveTo(-5, headY + 2, -2, headY - 1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(2, headY - 1); ctx.quadraticCurveTo(5, headY + 2, 9, headY - 1); ctx.stroke();
+    // Open awareness rays from eyes
+    for (let r = 0; r < 3; r++) {
+      const rad = 40 + r * 18;
+      ctx.strokeStyle = `rgba(130,200,160,${alpha * (0.04 - r * 0.01)})`;
+      ctx.beginPath(); ctx.ellipse(0, headY, rad, rad * 0.7, 0, 0, Math.PI * 2); ctx.stroke();
+    }
+    // Gravity axis dot at head center
+    const dotGlow = ctx.createRadialGradient(0, headY, 0, 0, headY, 14);
+    dotGlow.addColorStop(0, `rgba(200,185,120,${alpha * 0.5})`);
+    dotGlow.addColorStop(1, `rgba(200,185,120,0)`);
+    ctx.fillStyle = dotGlow; ctx.beginPath(); ctx.arc(0, headY, 14, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = `rgba(245,230,140,${alpha * 0.7})`; ctx.beginPath(); ctx.arc(0, headY, 3.2, 0, Math.PI * 2); ctx.fill();
+  } 
+  else {
+    ctx.fillStyle = `rgba(210,200,185,${alpha * 0.5})`;
+    ctx.beginPath(); ctx.arc(-5.5, headY - 1.5, 1.8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(5.5, headY - 1.5, 1.8, 0, Math.PI * 2); ctx.fill();
+  }
+  
+  // Third eye glow
+  const thirdGlow = ctx.createRadialGradient(0, headY - 8, 0, 0, headY - 8, 7);
+  thirdGlow.addColorStop(0, `rgba(255,220,140,${alpha * (0.45 + pulse * 0.2)})`);
+  thirdGlow.addColorStop(1, 'rgba(255,220,140,0)');
+  ctx.fillStyle = thirdGlow; ctx.beginPath(); ctx.arc(0, headY - 8, 6, 0, Math.PI * 2); ctx.fill();
+  
+  // Mouth & nose subtle
+  ctx.strokeStyle = `rgba(120,75,55,${alpha * 0.3})`; ctx.lineWidth = 0.8;
+  ctx.beginPath(); ctx.moveTo(-3.5, headY + 4.5); ctx.quadraticCurveTo(0, headY + 7, 3.5, headY + 4.5); ctx.stroke();
+  
+  // Halo / aura
+  const haloGrad = ctx.createRadialGradient(0, headY - 15, 0, 0, headY - 15, 36);
+  haloGrad.addColorStop(0, `rgba(160,140,180,${alpha * 0.12})`);
+  haloGrad.addColorStop(0.6, `rgba(120,100,150,${alpha * 0.05})`);
+  haloGrad.addColorStop(1, 'rgba(120,100,150,0)');
+  ctx.fillStyle = haloGrad; ctx.beginPath(); ctx.arc(0, headY - 12, 38, 0, Math.PI * 2); ctx.fill();
+  
+  // ========== PHONE HELD IN FRONT OF FACE (not above head) ==========
+  const phoneW = 62 * phoneScale, phoneH = 108 * phoneScale;
+  const phoneX = 0;   // centered in front of face
+  const phoneY = headY + 12;  // mouth/chin level, right in front of face
+  // Phone body
+  ctx.fillStyle = `rgba(28,32,38,${alpha * 0.85})`;
+  ctx.shadowBlur = 6; ctx.shadowColor = `rgba(0,0,0,${alpha * 0.5})`;
+  ctx.beginPath(); ctx.roundRect(phoneX - phoneW/2, phoneY - phoneH/2, phoneW, phoneH, 12); ctx.fill();
+  ctx.fillStyle = `rgba(45,55,65,${alpha * 0.7})`;
+  ctx.beginPath(); ctx.roundRect(phoneX - phoneW/2 + 4, phoneY - phoneH/2 + 4, phoneW - 8, phoneH - 8, 8); ctx.fill();
+  // Screen
+  const screenGlow = ctx.createLinearGradient(phoneX - phoneW/3, phoneY - phoneH/3, phoneX + phoneW/3, phoneY + phoneH/3);
+  screenGlow.addColorStop(0, `rgba(80,180,220,${alpha * 0.5})`);
+  screenGlow.addColorStop(1, `rgba(40,120,160,${alpha * 0.4})`);
+  ctx.fillStyle = screenGlow;
+  ctx.beginPath(); ctx.roundRect(phoneX - phoneW/2 + 8, phoneY - phoneH/2 + 12, phoneW - 16, phoneH - 28, 6); ctx.fill();
+  // Zoom label on screen
+  ctx.font = `${Math.max(12, 18 * phoneScale)}px 'Fraunces', monospace`;
+  ctx.fillStyle = `rgba(255,250,210,${alpha * 0.9})`;
+  ctx.shadowBlur = 2;
+  ctx.fillText(zoomLabel, phoneX - 8, phoneY + 6);
+  // Camera lens mock
+  ctx.fillStyle = `rgba(0,0,0,${alpha * 0.6})`; ctx.beginPath(); ctx.arc(phoneX + phoneW/2 - 12, phoneY - phoneH/2 + 15, 5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = `rgba(80,180,220,${alpha * 0.7})`; ctx.beginPath(); ctx.arc(phoneX + phoneW/2 - 12, phoneY - phoneH/2 + 15, 2, 0, Math.PI*2); ctx.fill();
+  
+  // Hands holding phone (graceful)
+  const leftHandX = phoneX - phoneW/2 - 4, rightHandX = phoneX + phoneW/2 + 4;
+  const handY = phoneY + 10;
+  ctx.fillStyle = `rgba(210,180,130,${alpha * 0.85})`;
+  ctx.beginPath(); ctx.ellipse(leftHandX, handY, 11, 8, -0.3, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(rightHandX, handY, 11, 8, 0.3, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = `rgba(180,150,100,${alpha * 0.7})`;
+  ctx.beginPath(); ctx.ellipse(leftHandX-2, handY-1, 5, 5, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(rightHandX+2, handY-1, 5, 5, 0, 0, Math.PI*2); ctx.fill();
+  
+  ctx.shadowBlur = 0;
+  
+  // Small energy rings around phone when zoom is high (scene 1)
+  if (zoomLabel === '5x') {
+    for (let i=0;i<3;i++) {
+      const ringSize = 42 + Math.sin(time*8 + i)*6;
+      ctx.strokeStyle = `rgba(220,120,70,${alpha * 0.2})`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.ellipse(phoneX, phoneY, ringSize, ringSize*0.7, 0, 0, Math.PI*2); ctx.stroke();
+    }
+  }
+  
+  // Dantien glow
+  const dantienY = waistY - 12;
+  const dantienGlow = ctx.createRadialGradient(0, dantienY, 0, 0, dantienY, 26 + breath * 10);
+  dantienGlow.addColorStop(0, `rgba(80,200,160,${alpha * 0.2})`);
+  dantienGlow.addColorStop(1, `rgba(80,200,160,0)`);
+  ctx.fillStyle = dantienGlow; ctx.beginPath(); ctx.arc(0, dantienY, 26 + breath * 10, 0, Math.PI*2); ctx.fill();
+  
+  ctx.restore();
+}
+
+// Helper: roundRect
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.moveTo(x+r, y);
+    this.lineTo(x+w-r, y);
+    this.quadraticCurveTo(x+w, y, x+w, y+r);
+    this.lineTo(x+w, y+h-r);
+    this.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    this.lineTo(x+r, y+h);
+    this.quadraticCurveTo(x, y+h, x, y+h-r);
+    this.lineTo(x, y+r);
+    this.quadraticCurveTo(x, y, x+r, y);
+    return this;
+  };
+}
+
+// Background and transition logic
+function drawBg(sf) {
+  const i = Math.floor(sf), fr = sf - i, n = Math.min(i+1, N-1);
+  const r = SCENES[i].bg[0]*(1-fr) + SCENES[n].bg[0]*fr;
+  const g = SCENES[i].bg[1]*(1-fr) + SCENES[n].bg[1]*fr;
+  const b = SCENES[i].bg[2]*(1-fr) + SCENES[n].bg[2]*fr;
+  const grd = ctx.createRadialGradient(cx, cy-30, 0, cx, cy, Math.max(W,H)*0.7);
+  grd.addColorStop(0, `rgb(${r|0},${g|0},${b|0})`);
+  grd.addColorStop(1, 'rgb(5,5,16)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0,0,W,H);
+  // floating particles (subtle)
+  for(let i=0;i<50;i++) {
+    let px = (Math.sin(time*0.2 + i)*137 + cx) % W;
+    let py = (Math.cos(time*0.17 + i)*73 + cy) % H;
+    ctx.fillStyle = `rgba(200,195,185,${0.02 * globalAlpha})`;
+    ctx.beginPath(); ctx.arc(px, py, 1.2, 0, Math.PI*2); ctx.fill();
+  }
+}
+
+function drawScene(idx, a) {
+  if(a<=0) return;
+  const params = SCENES[idx];
+  drawJourneyHero(cx-8, cy+28, a * globalAlpha, {
+    zoomLabel: params.zoomLabel,
+    shake: params.shake,
+    showAxis: params.showAxis,
+    focusMode: params.focusMode,
+    openMode: params.openMode,
+    phoneScale: params.phoneScale
+  });
+}
+
+function resizeCanvas() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr;
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx = W/2; cy = H/2;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function updUI() {
+  const s = SCENES[cur];
+  document.getElementById('stag').innerHTML = s.tag + ' · ' + s.tag_en;
+  document.getElementById('msub').innerHTML = s.sub.replace(/\n/g,'<br>') + '<div style="margin-top:6px;font-size:0.75em;color:rgba(180,200,190,0.4);font-style:italic">' + s.sub_en.replace(/\n/g,'<br>') + '</div>';
+  document.getElementById('ssci').innerHTML = s.sci + '<br>' + s.sci_en;
+  document.getElementById('sub').classList.add('vis');
+  const engDiv = document.getElementById('engBanner');
+  engDiv.innerHTML = s.sub_en.replace(/\n/g,'<br>');
+  engDiv.classList.add('vis');
+  document.getElementById('sn').textContent = `${cur+1} / ${N}`;
+  document.getElementById('pb').style.width = `${(cur/(N-1))*100}%`;
+  const dots = document.querySelectorAll('.dot');
+  dots.forEach((d,i)=> d.classList.toggle('active', i===cur));
+}
+function goTo(i) {
+  if(i<0 || i>=N || i===cur || trans) return;
+  tgt=i; trans=true; tT=0;
+  document.getElementById('sub').classList.remove('vis');
+  document.getElementById('engBanner').classList.remove('vis');
+  setTimeout(()=>{ cur=tgt; trans=false; updUI(); }, 1800);
+}
+function ease(t2){ return t2<0.5?4*t2*t2*t2:1-Math.pow(-2*t2+2,3)/2; }
+function togAuto(){ autoP=!autoP; document.getElementById('ab').innerHTML=autoP?'⏸ pause':'▶ auto'; if(autoP) runA(); else clearTimeout(autoTm); }
+function runA(){ if(!autoP) return; autoTm=setTimeout(()=>{ if(cur<N-1){ goTo(cur+1); setTimeout(runA, 7000); } else { autoP=false; document.getElementById('ab').innerHTML='▶ auto'; } }, 7000); }
+document.getElementById('intro').addEventListener('click',()=>{ document.getElementById('intro').classList.add('hidden'); updUI(); });
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight') goTo(cur+1); if(e.key==='ArrowLeft') goTo(cur-1); });
+
+// Dots creation
+document.getElementById('dotsC').innerHTML = SCENES.map((_,i)=>`<button class="dot${i===0?' active':''}" onclick="goTo(${i})"></button>`).join('');
+
+let lastTime = 0;
+function animate(now) {
+  requestAnimationFrame(animate);
+  let dt = Math.min((now - lastTime) / 1000, 0.05);
+  if(dt<0) dt=0.016;
+  lastTime = now;
+  time += dt;
+  if(globalAlpha < 1) globalAlpha = Math.min(1, globalAlpha + dt*0.6);
+  if(trans) tT = Math.min(tT + dt*0.7, 1);
+  ctx.clearRect(0,0,W,H);
+  const sf = trans ? cur + (tgt-cur)*ease(tT) : cur;
+  drawBg(sf);
+  ctx.globalAlpha = 1;
+  if(trans) {
+    const e2 = ease(tT);
+    drawScene(cur, 1-e2);
+    drawScene(tgt, e2);
+  } else {
+    drawScene(cur, 1);
+  }
+}
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
