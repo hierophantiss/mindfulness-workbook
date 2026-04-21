@@ -1,0 +1,465 @@
+/* ═══════════════════════════════════════════
+   polish.css — Visual Refinements
+   Warmer, cleaner, more polished feel
+   No structural changes — only visual overrides
+   ═══════════════════════════════════════════ */
+
+/* ═══ TOP BAR — cleaner, more breathing room ═══ */
+.top-bar {
+  box-shadow: none;
+  background: rgba(242, 241, 232, 0.8) !important; /* Muted light mode glass */
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+body.dark .top-bar {
+  background: rgba(10, 15, 16, 0.6) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ═══ HERO — subtle refinements ═══ */
+.hero-section {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 32px !important;
+  background: #0a0d14 !important;
+  overflow: hidden;
+}
+.hero-img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+}
+.hero-overlay-text {
+  font-family: 'Fraunces', serif;
+  font-size: 22px !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  letter-spacing: -0.01em;
+  font-weight: 700 !important;
+  animation: quoteBreathe 4s infinite ease-in-out;
+}
+
+@keyframes quoteBreathe {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+body.dark .hero-section {
+  box-shadow: none;
+  border: 1px solid var(--border);
+}
+
+/* ═══ CTA BUTTON — warmer glow ═══ */
+.cta-calm {
+  padding: 18px 22px;
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid var(--teal);
+  background: transparent;
+}
+.cta-icon {
+  font-size: 24px;
+  color: var(--teal);
+}
+.cta-label {
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+body.dark .cta-calm {
+  box-shadow: none;
+  background: transparent;
+  border: 1px solid var(--teal);
+}
+
+/* ═══ SOS HOME BUTTON — warmer, more inviting ═══ */
+[onclick*="activateSOS"] {
+  border-radius: 24px !important;
+  padding: 16px 20px !important;
+  background: rgba(192,112,80,0.15) !important;
+  border: 1px solid rgba(192,112,80,0.3) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+[onclick*="activateSOS"]:active {
+  transform: none !important;
+  background: var(--bg-card) !important;
+}
+[onclick*="activateSOS"] span:last-child {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 12px !important;
+  color: var(--text-soft) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.2px !important;
+}
+
+/* ═══ GRID CARDS — warmer, more depth ═══ */
+.grid-card, .bento-card {
+  border-radius: 28px !important;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  background: rgba(255, 255, 255, 0.5) !important; /* Brighter for light mode readability */
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+body.dark .grid-card, body.dark .bento-card {
+  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+}
+.grid-card .grid-label {
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+.grid-card .grid-sub {
+  font-size: 11px;
+  line-height: 1.5;
+  margin-top: 4px;
+  color: var(--text-soft);
+}
+
+body.dark .grid-card {
+  box-shadow: none;
+  border-color: var(--border);
+}
+
+/* ═══ BOTTOM NAV — glassmorphism ═══ */
+.bottom-nav {
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.05) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+  background: rgba(242, 241, 232, 0.85) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+}
+body.dark .bottom-nav {
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.2) !important;
+  background: rgba(10, 15, 16, 0.75) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+.nav-btn {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  gap: 4px;
+}
+.nav-btn.active {
+  transform: none;
+  color: var(--teal);
+}
+body.dark .bottom-nav {
+  box-shadow: none;
+  background: var(--sidebar-bg);
+}
+
+/* ═══ BUTTONS — slightly rounder, warmer ═══ */
+.btn-primary {
+  border-radius: 0;
+  padding: 14px 28px;
+  box-shadow: none;
+  border: 1px solid var(--teal);
+  background: transparent;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.btn-secondary {
+  border-radius: 0;
+  padding: 13px 26px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ═══ SCREEN HEADERS — cleaner ═══ */
+.screen-header {
+  padding: 14px 16px;
+  border-bottom-width: 1px;
+}
+.screen-title {
+  font-size: 17px;
+  letter-spacing: 0.3px;
+}
+
+/* ═══ SCROLL AREA — smoother feel ═══ */
+.scroll-area {
+  scroll-behavior: smooth;
+}
+/* Subtle fade at bottom before nav */
+.scroll-area::after {
+  content: '';
+  display: block;
+  height: 1px;
+}
+
+/* ═══ SUBTLE SPACING IMPROVEMENTS ═══ */
+.home-cta {
+  padding: 0 16px 8px;
+}
+.spacer-bottom {
+  height: 32px;
+}
+
+/* ═══ BREATH PATTERN BUTTONS — slightly rounder ═══ */
+.breath-pattern-btn {
+  border-radius: 16px;
+  min-width: 80px;
+}
+.breath-ctrl-btn {
+  border-radius: 28px;
+  min-height: 42px;
+  padding: 10px 24px;
+}
+
+/* ═══ DEEP FOCUS MODE (Breath Screen) ═══ */
+.deep-focus-active .breath-ui {
+  transform: translateY(calc(100% - 86px)) !important;
+  opacity: 0.85;
+  background: transparent !important;
+  border-top: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.deep-focus-active .breath-ui:hover {
+  opacity: 1;
+  transform: translateY(0) !important;
+  background: rgba(17,24,32,0.95) !important;
+  border-top: 1px solid rgba(168,213,220,0.1) !important;
+  backdrop-filter: blur(20px) !important;
+}
+.deep-focus-active .breath-ui-header,
+.deep-focus-active .breath-info-row,
+.deep-focus-active .breath-ui-collapsible,
+.deep-focus-active #bResetBtn {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+.deep-focus-active .breath-controls {
+  padding-top: 20px;
+  justify-content: center;
+}
+.deep-focus-active #bPlayBtn {
+  transform: scale(1.15);
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(168,213,220,0.2) !important;
+  min-width: 140px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.3);
+}
+.deep-focus-active .back-btn {
+  opacity: 0.05;
+  pointer-events: none;
+}
+.deep-focus-active .breath-hero-area {
+  height: 100vh;
+}
+.deep-focus-active .breath-phase-box {
+  bottom: 140px;
+}
+/* ═══ ONBOARDING OVERLAY ═══ */
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 20, 0.4);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+.onboarding-card {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  max-height: 85vh;
+  background: rgba(242, 241, 232, 0.96);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid var(--border);
+  border-radius: 32px;
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+  overflow: hidden;
+  animation: cardEntry 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+body.dark .onboarding-card {
+  background: rgba(15, 18, 22, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+}
+.onboarding-aura {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  pointer-events: none;
+  z-index: 0;
+}
+.onboarding-icon {
+  font-size: 56px;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+.onboarding-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+body.dark .onboarding-title {
+  color: #fff;
+}
+.onboarding-body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-soft);
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+  overflow-y: auto;
+  max-height: 40vh;
+  padding: 0 4px;
+}
+body.dark .onboarding-body {
+  color: rgba(255,255,255,0.7);
+}
+.onboarding-hero-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+.onboarding-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  flex-shrink: 0;
+}
+.onboarding-dots .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: all 0.3s;
+}
+.onboarding-dots .dot.active {
+  width: 20px;
+  background: var(--gold);
+  border-radius: 10px;
+}
+.onboarding-card-rich {
+  max-width: 460px;
+}
+.onboarding-highlight {
+  position: relative !important;
+  z-index: 10001 !important;
+  pointer-events: none !important;
+  box-shadow: 0 0 0 4px var(--gold), 0 0 60px var(--gold) !important;
+  transform: scale(1.05) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  background: var(--bg-card) !important;
+  border-color: var(--gold) !important;
+}
+.onboarding-highlight::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: inherit;
+  border: 2px solid var(--gold);
+  animation: ob-pulse 1.5s infinite;
+  pointer-events: none;
+}
+@keyframes ob-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+.onboarding-highlight-context {
+  z-index: 10001 !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+
+.btn-onboarding {
+  width: 100%;
+  padding: 16px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(58, 94, 87, 0.3);
+}
+.btn-onboarding:active {
+  transform: scale(0.96);
+}
+
+.onboarding-lang-switch {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: -10px;
+  position: relative;
+  z-index: 10;
+}
+.onboarding-lang-switch .lang-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(168,213,220,0.2);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.onboarding-lang-switch .lang-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg-dark);
+}
+
+@keyframes cardEntry {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.fade-out {
+  animation: fadeOut 0.6s forwards;
+}
+
+@media (max-width: 480px) {
+  .onboarding-card {
+    padding: 32px 24px;
+  }
+}

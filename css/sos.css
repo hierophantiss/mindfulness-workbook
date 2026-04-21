@@ -1,0 +1,93 @@
+/* ═══════════════════════════════════════════
+   sos.css — SOS Emergency Calm Mode Styles
+   Blue-teal breathing background + button polish
+   ═══════════════════════════════════════════ */
+
+/* ═══ SOS PATTERN BUTTON (in breath screen) ═══ */
+.sos-pattern-btn {
+  border-color: rgba(100,180,200,0.3) !important;
+  position: relative;
+  overflow: hidden;
+}
+.sos-pattern-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(13,27,42,0.25), rgba(42,93,94,0.15));
+  border-radius: inherit;
+  z-index: 0;
+}
+.sos-pattern-btn span { position: relative; z-index: 1; }
+.sos-pattern-btn.active {
+  border-color: rgba(100,200,220,0.5) !important;
+  box-shadow: 0 0 12px rgba(42,93,94,0.25);
+  background: rgba(13,27,42,0.4) !important;
+}
+
+/* ═══ SOS MODE — BREATHING BLUE-TEAL BACKGROUND ═══ */
+.breath-screen.sos-mode {
+  background: #0A0A0B !important;
+  animation: sosBreathe 20s ease-in-out infinite;
+}
+
+@keyframes sosBreathe {
+  0%   { background: #0A0A0B; }
+  50%  { background: #111112; }
+  100% { background: #0A0A0B; }
+}
+
+.breath-screen.sos-mode canvas { opacity: 0.65; }
+
+/* Softer text in SOS mode */
+.breath-screen.sos-mode .breath-phase-name { color: var(--teal) !important; font-family: 'Georgia', serif; }
+.breath-screen.sos-mode .bc-number { color: var(--teal) !important; opacity: 0.6; }
+.breath-screen.sos-mode .breath-phase-sub { color: var(--text-soft) !important; font-family: 'Georgia', serif; font-style: italic; }
+.breath-screen.sos-mode .bc-dot { background: transparent !important; border-color: var(--border) !important; border-radius: 0 !important; }
+.breath-screen.sos-mode .bc-dot.filled { background: var(--teal) !important; border-color: var(--teal) !important; }
+.breath-screen.sos-mode .bc-dot.current { background: var(--teal) !important; box-shadow: 0 0 12px var(--teal); }
+
+.breath-screen.sos-mode .breath-stat-val,
+.breath-screen.sos-mode .breath-stat-lbl,
+.breath-screen.sos-mode .breath-info-row { color: rgba(100,180,210,0.2) !important; }
+.breath-screen.sos-mode .breath-top-bar { opacity: 0.35; }
+.breath-screen.sos-mode .breath-ctrl-btn {
+  background: rgba(42,93,94,0.25) !important;
+  border-color: rgba(100,180,210,0.15) !important;
+  color: rgba(100,180,210,0.6) !important;
+}
+.breath-screen.sos-mode .breath-ctrl-btn:active { background: rgba(42,93,94,0.4) !important; }
+.breath-screen.sos-mode .breath-ui {
+  background: linear-gradient(to bottom, transparent 0%, rgba(10,20,30,0.7) 15%, rgba(10,20,30,0.95) 100%) !important;
+}
+.breath-screen.sos-mode #bPatternDesc { color: rgba(100,180,210,0.15) !important; }
+.breath-screen.sos-mode #bSafetyNote { color: rgba(100,180,210,0.1) !important; }
+
+/* SOS indicator */
+.breath-screen.sos-mode::after {
+  content: 'SOS';
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: rgba(100,180,210,0.15);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ═══ HOME SOS BUTTON — dark mode ═══ */
+body.dark [onclick*="activateSOS"] {
+  background: rgba(13,27,42,0.3) !important;
+  border-color: rgba(100,180,210,0.15) !important;
+}
+body.dark [onclick*="activateSOS"] span:last-child {
+  color: rgba(168,213,220,0.4) !important;
+}
+
+/* ═══ REDUCE MOTION ═══ */
+@media (prefers-reduced-motion: reduce) {
+  .breath-screen.sos-mode { animation: none !important; background: #0d1b2a !important; }
+}
+body.reduce-motion .breath-screen.sos-mode { animation: none !important; background: #0d1b2a !important; }
