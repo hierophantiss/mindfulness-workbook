@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="description" content="Τα 9 Στάδια της Σαμάθα — Εκγύμναση της προσοχής μέσω σχοινιού (βαρύτητα) και αγκίστρου (επίγνωση κίνησης νου).">
+<title>Σαμάθα — 9 Στάδια Προσοχής</title>
+<style>
+  /* ίδιο στυλ με πριν – το έχεις ήδη, το παραλείπω για συντομία, αλλά θα το βάλω στο τελικό αρχείο */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Literata', Georgia, serif; background: #D9E8DA; color: #1F2B27; padding: 20px 16px 40px; line-height: 1.5; }
+  body.dark { background: #0e1117; color: #d8dde3; }
+  .container { max-width: 700px; margin: 0 auto; }
+  h1 { font-family: 'Fraunces', serif; font-size: 26px; margin-bottom: 8px; color: #2A5D5E; }
+  body.dark h1 { color: #A8D5DC; }
+  .sub { font-size: 14px; color: #5C6761; margin-bottom: 24px; border-left: 3px solid #C8922A; padding-left: 12px; }
+  body.dark .sub { color: #9aa4aa; }
+  .legend { background: #E8F0E9; border-radius: 16px; padding: 14px; margin-bottom: 20px; font-size: 13px; border: 1px solid #B8C4B9; }
+  body.dark .legend { background: #1a1e26; border-color: #2a3038; }
+  .stage-selector { background: #E8F0E9; border-radius: 16px; padding: 16px; margin-bottom: 24px; border: 1px solid #B8C4B9; }
+  body.dark .stage-selector { background: #1a1e26; border-color: #2a3038; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px; font-weight: 700; }
+  input[type="range"] { width: 100%; accent-color: #2A5D5E; }
+  .stage-value { text-align: center; font-size: 28px; font-weight: 900; margin-top: 12px; font-family: 'Fraunces', serif; color: #2A5D5E; }
+  body.dark .stage-value { color: #A8D5DC; }
+  .card { background: #E8F0E9; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid #B8C4B9; }
+  body.dark .card { background: #1a1e26; border-color: #2a3038; }
+  .stage-icon { font-size: 48px; text-align: center; margin-bottom: 8px; }
+  .stage-img { max-width: 100%; border-radius: 16px; margin-bottom: 16px; border: 1px solid var(--border); background: white; }
+  .stage-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #2A5D5E; }
+  body.dark .stage-title { color: #A8D5DC; }
+  .stage-desc { font-size: 14px; margin-bottom: 16px; }
+  .stage-note { font-size: 13px; background: rgba(42,93,94,0.08); padding: 12px; border-radius: 12px; font-style: italic; border-left: 3px solid #C8922A; }
+  .note-area { margin-top: 24px; }
+  textarea { width: 100%; border: 1px solid #B8C4B9; border-radius: 12px; padding: 12px; font-family: inherit; font-size: 14px; background: white; color: #1F2B27; resize: vertical; }
+  body.dark textarea { background: #0e1117; color: #d8dde3; border-color: #2a3038; }
+  button { background: #2A5D5E; color: white; border: none; padding: 10px 18px; border-radius: 40px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 10px; width: 100%; }
+  button:active { transform: scale(0.97); }
+  .saved { font-size: 12px; text-align: center; margin-top: 8px; color: #7A9E7E; }
+  .lang-switch { text-align: right; margin-bottom: 16px; }
+  .lang-btn { background: none; border: 1px solid #B8C4B9; color: #2A5D5E; padding: 4px 12px; border-radius: 20px; font-size: 12px; width: auto; display: inline-block; margin-top: 0; }
+  body.dark .lang-btn { border-color: #2a3038; color: #A8D5DC; }
+  hr { margin: 20px 0; border-color: #B8C4B9; }
+  body.dark hr { border-color: #2a3038; }
+  .footnote { font-size: 11px; color: #6D7570; text-align: center; margin-top: 24px; }
+  .full-image { text-align: center; margin-top: 20px; margin-bottom: 10px; }
+  .full-image img { max-width: 100%; border-radius: 20px; border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="lang-switch">
+    <button class="lang-btn" id="langToggle">EN</button>
+  </div>
+  <h1 id="mainTitle">🐘 Τα 9 Στάδια της Σαμάθα</h1>
+  <div class="sub" id="subTitle">Ο νους ως ελέφαντας, η μαϊμού του DMN, ο λαγός της ξεκούρασης, και η αποδοχή που φωτίζει.</div>
+
+  <div class="legend" id="legend">
+    📖 Γλώσσα του νου:<br>
+    🐘 Ελέφαντας = νους (σκοτεινός → φωτεινός/διαυγής)<br>
+    🐒 Μαϊμού = DMN (νοητική περιπλάνηση, κριτής, ανησυχία)<br>
+    🐇 Λαγός = νωθρότητα + απαραίτητη ξεκούραση νευρικού συστήματος<br>
+    ✨ Φώτισμα (Διαύγεια) = χτίσιμο νήσου (insula) μέσω γείωσης & παρατήρησης<br>
+    🧗‍♂️ Σχοινί = βαρύτητα / επίγνωση του σώματος (άγκυρα της ενσυνειδητότητας)<br>
+    🪝 Άγκιστρο = επίγνωση της κίνησης του νου (παρατήρηση της προσοχής χωρίς ταύτιση)<br>
+    🧘 Ενσυνείδητος Παρατηρητής = ο νέος εαυτός που γειώνεται, παρατηρεί, αποδέχεται
+  </div>
+
+  <div class="stage-selector">
+    <div class="slider-label">
+      <span id="labelLeft">🌪️ Σκοτεινός νους (διάσπαρτος)</span>
+      <span id="labelRight">🧘 Φωτεινός νους (ενότητα)</span>
+    </div>
+    <input type="range" id="stageSlider" min="1" max="9" step="1" value="3">
+    <div class="stage-value" id="stageValue">Στάδιο 3</div>
+  </div>
+
+  <div class="card" id="stageCard">
+    <div class="stage-icon" id="stageIcon">🐘🐒💨</div>
+    <img id="stageImage" class="stage-img" src="stage1.png" alt="Στάδιο 1">
+    <div class="stage-title" id="stageTitle">Στάδιο 1: Ο σκοτεινός ελέφαντας και η μαϊμού (DMN)</div>
+    <div class="stage-desc" id="stageDesc">...</div>
+    <div class="stage-note" id="stageNote">...</div>
+  </div>
+
+  <div class="note-area">
+    <label id="noteLabel" style="font-weight:700; display:block; margin-bottom:6px">📝 Η προσωπική μου παρατήρηση:</label>
+    <textarea id="userNote" rows="3" placeholder="Πώς νιώθω σήμερα; Τι παρατηρώ για την προσοχή μου;..."></textarea>
+    <button id="saveBtn">💾 Αποθήκευση</button>
+    <div id="saveMsg" class="saved"></div>
+  </div>
+
+  <div class="full-image">
+    <h3 style="font-family:'Fraunces',serif; margin-bottom:6px;">🧩 Ολόκληρη η διαδρομή</h3>
+    <img src="shamatha_full.png" alt="Τα 9 στάδια της Σαμάθα - πλήρης εικόνα" onerror="this.style.display='none'">
+  </div>
+
+  <hr>
+  <div class="footnote" id="footnote">
+    🌿 Βασισμένο στην παράδοση Shamatha, με τραυματο-ενήμερη, νευροδιαφορετική ματιά. Η πρόοδος δεν είναι γραμμική — κάθε στάδιο είναι έγκυρο.
+  </div>
+</div>
+
+<script>
+  // Τα κείμενα είναι ίδια με αυτά που έγραψες εσύ, απλά προσαρμόζω τις αναφορές σε "σχοινί" και "άγκιστρο"
+  const STAGES = {
+    el: [
+      { num:1, icon:'🐘🐒💨 (σκοτεινός)', title:'Στάδιο 1: Ο σκοτεινός ελέφαντας και η μαϊμού (DMN)',
+        desc:'Ο νους (ελέφαντας) είναι σκοτεινός, ταραγμένος. Η μαϊμού – το δίκτυο DMN – έχει πάρει τα ηνία. Μέσα από την απόρριψη και το άγχος χάσαμε την επαφή με το σώμα. Το νευρικό σύστημα εγκλωβίστηκε σε κατάσταση μάχης ή φυγής (fight or flight). Η προσοχή πηδάει ασταμάτητα: ανησυχία, εκνευρισμός, θυμός, αυτοκριτική.',
+        note:'✨ Δεν πολεμάς τη μαϊμού. Απλά αρχίζεις να την παρατηρείς. Ο Ενσυνείδητος Παρατηρητής ρίχνει το πρώτο, ήρεμο βλέμμα.' },
+      { num:2, icon:'🐘🐒⛓️', title:'Στάδιο 2: Το σχοινί (βαρύτητα) και το άγκιστρο (επίγνωση νου)',
+        desc:'Ο Ενσυνείδητος Παρατηρητής ρίχνει το σχοινί: κάθε φορά που νιώθεις τη βαρύτητα (γείωση) – αυτό είναι το σχοινί. Στο άλλο χέρι κρατά το άγκιστρο: παρατηρεί την κίνηση του νου χωρίς να ταυτίζεται. Ο ελέφαντας σταματάει στιγμιαία. Η μαϊμού τραβάει μπροστά. Η προσοχή χάνεται – αλλά η ικανότητα επιστροφής αρχίζει να χτίζεται. Η επαφή με το σώμα αποκαθίσταται.',
+        note:'✨ Κάθε επιστροφή είναι νίκη. Η διάσπαση δεν εξαφανίζεται – απλώς γίνεται ορατή.' },
+      { num:3, icon:'🐘↩️ 🐒', title:'Στάδιο 3: Η μαϊμού (DMN) αρχίζει να ησυχάζει',
+        desc:'Ο ελέφαντας γυρίζει το κεφάλι. Η μαϊμού ακόμα πηδάει, αλλά υπάρχουν πλέον στιγμές σταθερότητας. Εργαλεία: σχοινί (βαρύτητα) + άγκιστρο (παρατήρηση νου) + καλοσύνη. Χωρίς βία. Ο ελέφαντας αρχίζει να φωτίζεται – ο νησιωτικός φλοιός (insula) ενδυναμώνεται. Η παρατήρηση χωρίς ταύτιση μεταμορφώνει το DMN από εξουσιαστή σε ένα απλό εργαλείο.',
+        note:'✨ Η καλοσύνη είναι το έδαφός σου. Δεν πειράζει καθόλου αν επιστρέφεις σε προηγούμενα στάδια.' },
+      { num:4, icon:'🐘👀 🐒↩️', title:'Στάδιο 4: Σταθερότητα με προσπάθεια',
+        desc:'Ο ελέφαντας κοιτάζει πίσω, η μαϊμού ακολουθεί. Η προσοχή μένει περισσότερο, χρειάζεται όμως συχνή υπενθύμιση. Ο ελέφαντας αποκτά όλο και περισσότερη διαύγεια. Ο Ενσυνείδητος Παρατηρητής νιώθει ότι «δουλεύει» – σημάδι ότι το νευρικό σύστημα δυναμώνει. Η γείωση και η παρατήρηση γίνονται συνήθεια. Το DMN δεν έχει πια τον απόλυτο έλεγχο.',
+        note:'✨ Η προσπάθεια εδώ είναι φυσική. Είναι εξάσκηση, όχι τιμωρία.' },
+      { num:5, icon:'🐘🚶 🧘', title:'Στάδιο 5: Η μαϊμού φεύγει – έρχεται ο λαγός (ξεκούραση)',
+        desc:'Η μαϊμού (DMN) εξαφανίζεται. Ο ελέφαντας παίρνει έναν πιο απαλό, ενδιάμεσο τόνο. Το σχοινί χαλαρώνει. Εμφανίζεται ο λαγός: νωθρότητα, λήθαργος. Προσοχή: αυτό **δεν** είναι αποτυχία. Είναι η απαραίτητη ξεκούραση του νευρικού συστήματος μετά από χρόνια υπερφόρτωσης. Ο λαγός είναι θεραπευτικός. Χωρίς αυτόν, ο εγκέφαλος δεν μπορεί να επουλωθεί.',
+        note:'✨ Καλωσόρισε τον λαγό και δώσε του χώρο. Αν χρειάζεται, άνοιξε ελαφρά την προσοχή σου στον χώρο ή κάνε μια μικρή κίνηση.' },
+      { num:6, icon:'🐘🤝', title:'Στάδιο 6: Ο ελέφαντας ακολουθεί – χωρίς σχοινί',
+        desc:'Ο ελέφαντας ακολουθεί από μόνος του, οργανικά, χωρίς το σχοινί. Ο λαγός είναι ακόμα παρών, αλλά δεν κυριαρχεί – η ξεκούραση έχει πλέον ενσωματωθεί. Ο νους είναι σχεδόν φωτεινός. Η νήσος έχει χτιστεί αρκετά ώστε η επιστροφή στο «τώρα» να γίνεται σχεδόν αυτόματα. Δεν υπάρχει πάλη – μόνο ήπια εγρήγορση.',
+        note:'✨ Το DMN δεν είναι πια εξουσιαστής. Ο λαγός έγινε σύμμαχος.' },
+      { num:7, icon:'🐘🚶‍♂️', title:'Στάδιο 7: Αυτόματη σταθερότητα',
+        desc:'Ο ελέφαντας περπατά ελεύθερος, με τον Ενσυνείδητο Παρατηρητή από πίσω. Η προσοχή παραμένει σταθερή με ελάχιστη προσπάθεια. Ο νους είναι φωτεινός και διαυγής. Ο λαγός έχει ησυχάσει – η χαλάρωση είναι πλέον φυσική κατάσταση, όχι εμπόδιο. Η παρουσία έρχεται χωρίς να χρειάζεται να την κυνηγάς.',
+        note:'✨ Το σώμα δεν είναι κλουβί, είναι η βάση σου. Η καλοσύνη ρέει από μόνη της.' },
+      { num:8, icon:'🐘🧘', title:'Στάδιο 8: Ενότητα παρατηρητή και νου',
+        desc:'Ο Ενσυνείδητος Παρατηρητής και ο ελέφαντας γίνονται ένα. Η προσοχή ρέει αβίαστα. Υπάρχει ακόμα μια αίσθηση του «εγώ που παρατηρεί», αλλά χωρίς καμία τριβή. Ο νους είναι φωτεινός και διάφανος. Το DMN δεν έχει καταργηθεί – απλά δεν βρίσκεται στο τιμόνι. Βαρύτητα, αναπνοή και χώρος λειτουργούν αρμονικά.',
+        note:'✨ Η ενσυνειδητότητα γίνεται δεύτερη φύση. Η αποδοχή λειτουργεί αυτόματα.' },
+      { num:9, icon:'✨🐘✨', title:'Στάδιο 9: Η φυσική ροή (Shamatha)',
+        desc:'Η προσοχή είναι ακλόνητη, διαυγής, χωρίς καμία προσπάθεια. Ο νους είναι φως. Η νήσος, η βαρύτητα, η αναπνοή, ο χώρος και το φως γίνονται ένα. Ο παρατηρητής και ο νους κινούνται σε απόλυτη αρμονία. Το DMN ησυχάζει εντελώς όταν δεν το χρειάζεσαι. Δεν υπάρχει διάσπαση, ούτε λήθαργος – παρά μόνο καθαρή παρουσία.',
+        note:'✨ Αυτό δεν είναι ένας στόχος προς κατάκτηση, αλλά ένας ορίζοντας. Κάθε στάδιο είναι πλήρες από μόνο του. Η αποδοχή ήταν πάντα η μέθοδος.' }
+    ],
+    en: [ /* τα αγγλικά μένουν όπως είχαν, αλλά με rope & hook */ 
+      { num:1, icon:'🐘🐒💨 (dark)', title:'Stage 1: The dark elephant and the monkey (DMN)',
+        desc:'The mind (elephant) is dark, agitated. The monkey – the DMN – has taken the reins. Due to rejection and anxiety, we lost contact with the body. The nervous system got stuck in fight or flight. Attention jumps uncontrollably: anxiety, irritation, anger, self-criticism.',
+        note:'✨ Don\'t fight the monkey. Just begin to observe. The Mindful Observer casts the first, calm glance.' },
+      { num:2, icon:'🐘🐒⛓️', title:'Stage 2: The rope (gravity) and the hook (mind awareness)',
+        desc:'The Mindful Observer throws the rope: each time you feel gravity (grounding) – that is the rope. In the other hand, they hold the hook: observing the mind’s movement without clinging. The elephant stops briefly. The monkey pulls ahead. Attention is lost – but the ability to return begins to build. Body reconnection is restored.',
+        note:'✨ Every return is a victory. Distraction doesn’t disappear – it becomes visible.' },
+      { num:3, icon:'🐘↩️ 🐒', title:'Stage 3: The monkey (DMN) begins to calm',
+        desc:'The elephant turns its head. The monkey still jumps, but there are moments of stability. Tools: rope (gravity) + hook (mind observation) + kindness. No force. The elephant begins to illuminate – the insula strengthens. Observation without identification transforms DMN from tyrant to simple tool.',
+        note:'✨ Kindness is your ground. It’s okay to fall back to lower stages.' },
+      { num:4, icon:'🐘👀 🐒↩️', title:'Stage 4: Stability with effort',
+        desc:'The elephant looks back, the monkey follows. Attention lasts longer, needs frequent reminding. The elephant gains clarity. The Mindful Observer feels “working” – a sign the nervous system is strengthening. Grounding and observation become habit. DMN no longer absolute driver.',
+        note:'✨ Effort here is natural – practice, not punishment.' },
+      { num:5, icon:'🐘🚶 🧘', title:'Stage 5: The monkey leaves – the rabbit arrives (rest)',
+        desc:'The monkey (DMN) disappears. The elephant softens. The rope loosens. The rabbit appears: dullness, lethargy. This is NOT failure – necessary rest for the nervous system after chronic overload. The rabbit is healing. Without it, the brain cannot recover.',
+        note:'✨ Welcome the rabbit. Give it space. If needed, open awareness gently or move a little.' },
+      { num:6, icon:'🐘🤝', title:'Stage 6: The elephant follows – without the rope',
+        desc:'The elephant follows organically, on its own, without the rope. The rabbit is still present but doesn’t dominate – rest is integrated. The mind is almost luminous. The insula is built enough that returning to the "now" happens almost automatically. No struggle – only gentle vigilance.',
+        note:'✨ DMN is no longer tyrant. The rabbit became an ally.' },
+      { num:7, icon:'🐘🚶‍♂️', title:'Stage 7: Automatic stability',
+        desc:'The elephant walks freely, the Mindful Observer behind. Attention remains stable with minimal effort. The mind is clear and luminous. The rabbit has settled – relaxation is natural, not an obstacle. Presence comes without chasing.',
+        note:'✨ The body is not a cage – it is your base. Kindness flows on its own.' },
+      { num:8, icon:'🐘🧘', title:'Stage 8: Unity of observer and mind',
+        desc:'The Mindful Observer and the elephant become one. Attention flows effortlessly. A slight sense of “I who observes” remains, but no friction. The mind is luminous and transparent. DMN not abolished – just not at the wheel. Gravity, breath, space work harmoniously.',
+        note:'✨ Mindfulness becomes second nature. Acceptance operates automatically.' },
+      { num:9, icon:'✨🐘✨', title:'Stage 9: The natural flow (Shamatha)',
+        desc:'Attention is unwavering, clear, effortless. The mind is pure light. Insula, gravity, breath, space, light become one. Observer and mind move in perfect harmony. DMN rests completely when not needed. No distraction, no dullness – only pure presence.',
+        note:'✨ Not a goal to conquer, but a horizon. Every stage is complete. Acceptance was always the method.' }
+    ]
+  };
+
+  // JavaScript (ίδιος κώδικας λειτουργίας με πριν, απλά με ενημέρωση εικόνας και γλώσσας)
+  let lang = 'el';
+  let currentStage = 3;
+  let saveTimeout = null;
+  const slider = document.getElementById('stageSlider');
+  const stageValueDiv = document.getElementById('stageValue');
+  const stageIcon = document.getElementById('stageIcon');
+  const stageTitle = document.getElementById('stageTitle');
+  const stageDesc = document.getElementById('stageDesc');
+  const stageNote = document.getElementById('stageNote');
+  const stageImage = document.getElementById('stageImage');
+  const userNote = document.getElementById('userNote');
+  const saveBtn = document.getElementById('saveBtn');
+  const saveMsg = document.getElementById('saveMsg');
+  const langToggle = document.getElementById('langToggle');
+
+  function loadSaved() {
+    const savedStage = localStorage.getItem('shamatha_stage');
+    if (savedStage !== null) { currentStage = parseInt(savedStage, 10); slider.value = currentStage; }
+    const savedNote = localStorage.getItem('shamatha_note');
+    if (savedNote !== null) userNote.value = savedNote;
+    updateUI();
+  }
+  function saveStage() { localStorage.setItem('shamatha_stage', currentStage); }
+  function saveNote() {
+    localStorage.setItem('shamatha_note', userNote.value);
+    saveMsg.textContent = (lang === 'el' ? '✓ Αποθηκεύτηκε' : '✓ Saved');
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => { saveMsg.textContent = ''; }, 2000);
+  }
+  function updateUI() {
+    const stageData = STAGES[lang][currentStage-1];
+    stageIcon.textContent = stageData.icon;
+    stageTitle.textContent = stageData.title;
+    stageDesc.textContent = stageData.desc;
+    stageNote.textContent = stageData.note;
+    stageValueDiv.textContent = (lang === 'el' ? 'Στάδιο ' : 'Stage ') + currentStage;
+    stageImage.src = `stage${currentStage}.png`;
+    stageImage.alt = stageData.title;
+  }
+  function setLang(newLang) {
+    lang = newLang;
+    document.documentElement.lang = lang;
+    langToggle.textContent = lang === 'el' ? 'EN' : 'ΕΛ';
+    document.getElementById('mainTitle').textContent = (lang === 'el' ? '🐘 Τα 9 Στάδια της Σαμάθα' : '🐘 The 9 Stages of Shamatha');
+    document.getElementById('subTitle').textContent = (lang === 'el' 
+      ? 'Ο νους ως ελέφαντας, η μαϊμού του DMN, ο λαγός της ξεκούρασης, και η αποδοχή που φωτίζει.'
+      : 'The mind as an elephant, the monkey of DMN, the rabbit of rest, and the acceptance that illuminates.');
+    document.getElementById('labelLeft').textContent = (lang === 'el' ? '🌪️ Σκοτεινός νους (διάσπαρτος)' : '🌪️ Dark mind (scattered)');
+    document.getElementById('labelRight').textContent = (lang === 'el' ? '🧘 Φωτεινός νους (ενότητα)' : '🧘 Luminous mind (unity)');
+    document.getElementById('noteLabel').textContent = (lang === 'el' ? '📝 Η προσωπική μου παρατήρηση:' : '📝 My personal observation:');
+    saveBtn.textContent = (lang === 'el' ? '💾 Αποθήκευση' : '💾 Save');
+    document.getElementById('footnote').textContent = (lang === 'el'
+      ? '🌿 Βασισμένο στην παράδοση Shamatha, με τραυματο-ενήμερη, νευροδιαφορετική ματιά. Η πρόοδος δεν είναι γραμμική — κάθε στάδιο είναι έγκυρο.'
+      : '🌿 Based on Shamatha tradition, with a trauma-informed, neurodivergent lens. Progress is not linear — every stage is valid.');
+    const legendDiv = document.getElementById('legend');
+    if (lang === 'el') {
+      legendDiv.innerHTML = `📖 Γλώσσα του νου:<br>
+🐘 Ελέφαντας = νους (σκοτεινός → φωτεινός/διαυγής)<br>
+🐒 Μαϊμού = DMN (νοητική περιπλάνηση, κριτής, ανησυχία)<br>
+🐇 Λαγός = νωθρότητα + απαραίτητη ξεκούραση νευρικού συστήματος<br>
+✨ Φώτισμα (Διαύγεια) = χτίσιμο νήσου (insula) μέσω γείωσης & παρατήρησης<br>
+🧗‍♂️ Σχοινί = βαρύτητα / επίγνωση του σώματος (άγκυρα της ενσυνειδητότητας)<br>
+🪝 Άγκιστρο = επίγνωση της κίνησης του νου (παρατήρηση της προσοχής χωρίς ταύτιση)<br>
+🧘 Ενσυνείδητος Παρατηρητής = ο νέος εαυτός που γειώνεται, παρατηρεί, αποδέχεται`;
+    } else {
+      legendDiv.innerHTML = `📖 Language of the mind:<br>
+🐘 Elephant = mind (dark → illuminated/clear)<br>
+🐒 Monkey = DMN (wandering, self-criticism, anxiety)<br>
+🐇 Rabbit = dullness + necessary rest for the nervous system<br>
+✨ Illumination (Clarity) = building insula via grounding & observation<br>
+🧗‍♂️ Rope = gravity / body awareness (anchor of mindfulness)<br>
+🪝 Hook = awareness of mind's movement (observing attention without clinging)<br>
+🧘 Mindful Observer = the new self who grounds, observes, accepts`;
+    }
+    updateUI();
+  }
+
+  slider.addEventListener('input', (e) => { currentStage = parseInt(e.target.value, 10); saveStage(); updateUI(); });
+  saveBtn.addEventListener('click', saveNote);
+  userNote.addEventListener('input', () => { if (saveTimeout) clearTimeout(saveTimeout); saveTimeout = setTimeout(saveNote, 800); });
+  langToggle.addEventListener('click', () => setLang(lang === 'el' ? 'en' : 'el'));
+
+  function syncDarkMode() {
+    if (window.parent && window.parent.document.body) {
+      if (window.parent.document.body.classList.contains('dark')) document.body.classList.add('dark');
+      else document.body.classList.remove('dark');
+    } else {
+      const darkPref = localStorage.getItem('darkMode');
+      if (darkPref === '1') document.body.classList.add('dark');
+      else if (darkPref === '0') document.body.classList.remove('dark');
+    }
+  }
+  syncDarkMode();
+  try {
+    const observer = new MutationObserver(syncDarkMode);
+    if (window.parent && window.parent.document.body) observer.observe(window.parent.document.body, { attributes: true, attributeFilter: ['class'] });
+  } catch(e) {}
+  loadSaved();
+  setLang('el');
+</script>
+</body>
+</html>
