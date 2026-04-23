@@ -1,0 +1,199 @@
+/* ═══════════════════════════════════════════
+   polish.css — Visual Refinements
+   Warmer, cleaner, more polished feel
+   No structural changes — only visual overrides
+   ═══════════════════════════════════════════ */
+
+/* ═══ TOP BAR — cleaner, more breathing room ═══ */
+.top-bar {
+  box-shadow: none;
+  border-bottom: 1px solid var(--border);
+}
+.top-subtitle-el {
+  font-size: 6.5px;
+  opacity: 0.4;
+  font-family: var(--sans);
+}
+body.dark .top-bar {
+  box-shadow: none;
+  background: var(--sidebar-bg);
+}
+
+/* ═══ HERO — subtle refinements ═══ */
+.hero-section {
+  box-shadow: none;
+  border: 1px solid var(--border);
+  border-radius: 0;
+}
+.hero-overlay {
+  padding: 40px 20px 16px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 100%);
+}
+.hero-overlay-text {
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+body.dark .hero-section {
+  box-shadow: none;
+  border: 1px solid var(--border);
+}
+
+/* ═══ CTA BUTTON — warmer glow ═══ */
+.cta-calm {
+  padding: 18px 22px;
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid var(--teal);
+  background: transparent;
+}
+.cta-icon {
+  font-size: 24px;
+  color: var(--teal);
+}
+.cta-label {
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+body.dark .cta-calm {
+  box-shadow: none;
+  background: transparent;
+  border: 1px solid var(--teal);
+}
+
+/* ═══ SOS HOME BUTTON — warmer, more inviting ═══ */
+[onclick*="activateSOS"] {
+  border-radius: 0 !important;
+  padding: 14px 18px !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  background: transparent !important;
+  border-color: var(--border) !important;
+  transition: all 0.2s !important;
+}
+[onclick*="activateSOS"]:active {
+  transform: none !important;
+  background: var(--bg-card) !important;
+}
+[onclick*="activateSOS"] span:last-child {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 12px !important;
+  color: var(--text-soft) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.2px !important;
+}
+
+/* ═══ GRID CARDS — warmer, more depth ═══ */
+.grid-card {
+  border-radius: 0;
+  padding: 16px 18px !important;
+  box-shadow: none;
+  border: 1px solid var(--border);
+  border-top: 1px solid var(--border) !important;
+  transition: all 0.2s;
+}
+.grid-card .grid-label {
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+.grid-card .grid-sub {
+  font-size: 11px;
+  line-height: 1.5;
+  margin-top: 4px;
+  color: var(--text-soft);
+}
+
+body.dark .grid-card {
+  box-shadow: none;
+  border-color: var(--border);
+}
+
+/* ═══ BOTTOM NAV — cleaner separation ═══ */
+.bottom-nav {
+  box-shadow: none;
+  border-top: 1px solid var(--border);
+  background: var(--sidebar-bg);
+}
+.nav-btn {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  gap: 4px;
+}
+.nav-btn.active {
+  transform: none;
+  color: var(--teal);
+}
+body.dark .bottom-nav {
+  box-shadow: none;
+  background: var(--sidebar-bg);
+}
+
+/* ═══ BUTTONS — slightly rounder, warmer ═══ */
+.btn-primary {
+  border-radius: 0;
+  padding: 14px 28px;
+  box-shadow: none;
+  border: 1px solid var(--teal);
+  background: transparent;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.btn-secondary {
+  border-radius: 0;
+  padding: 13px 26px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ═══ SCREEN HEADERS — cleaner ═══ */
+.screen-header {
+  padding: 14px 16px;
+  border-bottom-width: 1px;
+}
+.screen-title {
+  font-size: 17px;
+  letter-spacing: 0.3px;
+}
+
+/* ═══ SCROLL AREA — smoother feel ═══ */
+.scroll-area {
+  scroll-behavior: smooth;
+}
+/* Subtle fade at bottom before nav */
+.scroll-area::after {
+  content: '';
+  display: block;
+  height: 1px;
+}
+
+/* ═══ SUBTLE SPACING IMPROVEMENTS ═══ */
+.home-cta {
+  padding: 0 16px 8px;
+}
+.spacer-bottom {
+  height: 32px;
+}
+
+/* ═══ BREATH PATTERN BUTTONS — slightly rounder ═══ */
+.breath-pattern-btn {
+  border-radius: 16px;
+  min-width: 80px;
+}
+.breath-ctrl-btn {
+  border-radius: 28px;
+  min-height: 42px;
+  padding: 10px 24px;
+}
