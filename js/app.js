@@ -15,34 +15,10 @@ const App = {
   deferredPrompt: null,
 
   init() {
-    this.registerServiceWorker();
     this.registerPWA();
     this.setupAccessibility();
     this.restoreState();
     this.setupNavigation();
-    this.checkFirstVisit();
-  },
-
-  checkFirstVisit() {
-    try {
-      const hasVisited = localStorage.getItem('intro_seen_v2');
-      if (!hasVisited) {
-        setTimeout(() => {
-          const overlay = document.getElementById('intro-overlay');
-          if (overlay) overlay.classList.add('active');
-        }, 500);
-      }
-    } catch(e) { console.warn(e); }
-  },
-
-  registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(reg => console.log('SW registered', reg))
-          .catch(err => console.error('SW registration failed', err));
-      });
-    }
   },
 
   registerPWA() {
@@ -142,6 +118,7 @@ const App = {
       case 'chapters': buildChaptersList(); break;
       case 'practice': buildPracticeList(); break;
       case 'breath': setTimeout(() => { if(typeof initBreathExercise === 'function') initBreathExercise(); }, 150); break;
+      case 'ai': if(typeof buildAIScreen === 'function') buildAIScreen(); break;
       case 'journal': if(typeof buildJournal === 'function') buildJournal(); break;
       case 'start': if(typeof buildStartScreen === 'function') buildStartScreen(); break;
       case 'micro': if(typeof buildMicroScreen === 'function') buildMicroScreen(); break;
@@ -152,23 +129,6 @@ const App = {
   },
 
   goBack() {
-    if (this.currentScreen === 'breath') {
-      // If a breathing session is active (immersive mode), exit it first 
-      // instead of navigating away immediately.
-      if (typeof window.bSessionActive !== 'undefined' && window.bSessionActive) {
-        if (typeof window.bPause === 'function') window.bPause();
-        window.bSessionActive = false;
-        if (typeof window.stopBreathAudio === 'function') window.stopBreathAudio();
-        if (typeof window.bUpdateMainControls === 'function') window.bUpdateMainControls();
-        return;
-      }
-      
-      // Otherwise, go back to practice screen, filtered to breath
-      this.screenHistory.pop();
-      window.currentPracticeCat = 'breath';
-      this.showScreen('practice');
-      return;
-    }
     if (this.screenHistory.length > 1) {
       this.screenHistory.pop(); // current
       const prev = this.screenHistory.pop(); // previous
@@ -187,10 +147,6 @@ const App = {
   setLang(lang) {
     LANG = lang;
     document.documentElement.lang = lang;
-
-    if (typeof logMindfulAction === 'function') {
-        logMindfulAction('lang_switch', { lang });
-    }
 
     const btn = document.getElementById('lang-label');
     if (btn) btn.textContent = lang === 'el' ? 'EN' : 'ΕΛ';
@@ -218,44 +174,37 @@ const App = {
   updateHeroBtnUI() {
     const audioBtn = document.getElementById('hero-btn-audio');
     const voiceBtn = document.getElementById('hero-btn-voice');
-    
-    // Restore initial mapping: Audio toggles Ambient Music, Voice toggles Bowls
-    const audioActive = !!(window.focusOn);
-    const voiceActive = !!(window.bowlsOn);
+    const audioActive = !!(window.breathAudioOn);
+    const voiceActive = !!(window.bVoiceEnabled);
     
     if (audioBtn) {
       audioBtn.classList.toggle('active', audioActive);
       audioBtn.setAttribute('aria-pressed', audioActive);
       const icon = document.getElementById('hero-audio-icon');
-      if (icon) icon.textContent = audioActive ? '♫' : '♪';
+      if (icon) icon.textContent = audioActive ? '🎧' : '♪';
     }
     if (voiceBtn) {
       voiceBtn.classList.toggle('active', voiceActive);
       voiceBtn.setAttribute('aria-pressed', voiceActive);
-      const icon = document.getElementById('hero-voice-icon');
-      if (icon) icon.textContent = '🔔';
     }
   }
 };
 
-function openPracticeItem(file) {
-  if (file.startsWith('cmd:')) {
-    const cmd = file.split(':')[1];
-    if (cmd === 'bowls') { if(typeof toggleBowls === 'function') toggleBowls(); }
-    else if (cmd === 'focus') { if(typeof toggleFocus === 'function') toggleFocus(); }
-    else if (cmd === 'breath') { 
-      showScreen('breath'); 
-      setTimeout(() => { if(typeof toggleBreathAudio === 'function') toggleBreathAudio(); }, 300);
-    }
-    return;
+function toggleHeroAudio() {
+  if (typeof toggleBreathAudio === 'function') {
+    toggleBreathAudio();
   }
-  const practices = (T[LANG]?.practices || T.el.practices) || [];
-  const ex = practices.find(p => p.file === file);
-  if (ex && ex.warn) { openTW(file, ex.warn); return; }
-  launchPractice(file);
+}
+
+function toggleHeroVoice() {
+  if (typeof toggleBreathVoice === 'function') {
+    toggleBreathVoice();
+  }
 }
 
 // Global Exposure for legacy script compatibility
+window.toggleHeroAudio = toggleHeroAudio;
+window.toggleHeroVoice = toggleHeroVoice;
 function showScreen(id) { App.showScreen(id); }
 function goBack() { App.goBack(); }
 function setLang(l) { App.setLang(l); }
@@ -266,19 +215,6 @@ function toggleDark() {
 }
 function t(k) { return (T[LANG] && T[LANG][k]) || (T.el && T.el[k]) || k; }
 
-function closeIntroModal() {
-  const overlay = document.getElementById('intro-overlay');
-  if (overlay) {
-    overlay.classList.remove('active');
-    setTimeout(() => {
-      overlay.style.display = 'none';
-    }, 400); // Matches CSS transition duration
-  }
-  try {
-    localStorage.setItem('intro_seen_v2', 'true');
-  } catch(e) {}
-}
-
 function toggleMenu() {
   const overlay = document.getElementById('menu-overlay');
   const panel = document.getElementById('menu-panel');
@@ -286,8 +222,8 @@ function toggleMenu() {
     overlay.style.display = 'block';
     // Trigger reflow for animation
     overlay.offsetHeight;
-    overlay.classList.add('open');
-    panel.classList.add('open');
+    overlay.classList.add('active');
+    panel.classList.add('active');
   }
 }
 
@@ -295,8 +231,8 @@ function closeMenu() {
   const overlay = document.getElementById('menu-overlay');
   const panel = document.getElementById('menu-panel');
   if (overlay && panel) {
-    overlay.classList.remove('open');
-    panel.classList.remove('open');
+    overlay.classList.remove('active');
+    panel.classList.remove('active');
     setTimeout(() => {
       overlay.style.display = 'none';
     }, 400);
@@ -306,169 +242,6 @@ function closeMenu() {
 function menuNavigate(id) {
   closeMenu();
   showScreen(id);
-}
-
-/* ═══ GLOBAL EVENT DELEGATION ═══ */
-document.addEventListener('DOMContentLoaded', () => {
-  document.body.addEventListener('click', (e) => {
-    // Traverse up to find a button or element with data-action
-    const target = e.target.closest('[data-action]');
-    if (!target) return;
-    
-    const action = target.getAttribute('data-action');
-    
-    switch (action) {
-      case 'welcome-breath':
-        if(typeof tapFeedback === 'function') tapFeedback();
-        welcomeAction('breath');
-        break;
-      case 'welcome-explore':
-        if(typeof tapFeedback === 'function') tapFeedback();
-        welcomeAction('explore');
-        break;
-      case 'toggle-menu':
-        toggleMenu();
-        break;
-      case 'toggle-dark':
-        toggleDark();
-        break;
-      case 'toggle-lang':
-        setLang(LANG === 'el' ? 'en' : 'el');
-        break;
-      case 'close-menu':
-        closeMenu();
-        break;
-      case 'menu-navigate':
-        menuNavigate(target.getAttribute('data-screen'));
-        break;
-      case 'menu-chapters-ltm':
-        closeMenu();
-        showScreen('chapters');
-        setTimeout(() => typeof openLearningToRide === 'function' && openLearningToRide(), 400);
-        break;
-      case 'menu-breath-sos':
-        closeMenu();
-        showScreen('breath');
-        setTimeout(() => typeof activateSOS === 'function' && activateSOS(), 400);
-        break;
-      case 'toggle-hero-audio':
-        toggleHeroAudio();
-        break;
-      case 'toggle-hero-voice':
-        toggleHeroVoice();
-        break;
-      case 'show-screen':
-        showScreen(target.getAttribute('data-screen'));
-        break;
-      case 'go-back':
-        goBack();
-        break;
-      case 'toggle-breath-voice':
-        if(typeof toggleBreathVoice === 'function') toggleBreathVoice();
-        break;
-      case 'toggle-breath-audio':
-        if(typeof toggleBreathAudio === 'function') toggleBreathAudio();
-        break;
-      case 'breath-play':
-        if(typeof handlePlayClick === 'function') handlePlayClick();
-        break;
-      case 'breath-exit':
-        if(typeof handleExitClick === 'function') handleExitClick();
-        break;
-      case 'breath-reset':
-        if(typeof bReset === 'function') bReset();
-        break;
-      case 'breath-pattern':
-        if(typeof switchPattern === 'function') switchPattern(target.getAttribute('data-pattern'));
-        break;
-      case 'close-practice':
-        if(typeof closePractice === 'function') closePractice();
-        break;
-      case 'close-tw':
-        if(typeof closeTW === 'function') closeTW();
-        break;
-      case 'confirm-tw':
-        if(typeof confirmTW === 'function') confirmTW();
-        break;
-      default:
-        // Action not handled here
-        break;
-    }
-  });
-
-  // Stop propagation for specific cards
-  document.querySelectorAll('[data-stop-propagation]').forEach(el => {
-    el.addEventListener('click', e => e.stopPropagation());
-  });
-});
-
-function closeWelcome() {
-  const overlay = document.getElementById('welcome-overlay');
-  if (overlay) {
-    overlay.style.opacity = '0';
-    setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = ''; }, 300);
-  }
-  try { localStorage.setItem('welcomeSeen', '1'); } catch (e) {}
-}
-
-function welcomeAction(action) {
-  closeWelcome();
-  if (action === 'breath') {
-    showScreen('breath');
-  } else if (action === 'explore') {
-    showScreen('chapters');
-  }
-}
-
-/* ═══ HERO AUDIO / VOICE TOGGLES ═══ */
-function toggleHeroAudio() {
-  if (typeof toggleFocus === 'function') {
-    toggleFocus();
-  } else {
-    window.focusOn = !window.focusOn;
-  }
-  if (App && typeof App.updateHeroBtnUI === 'function') App.updateHeroBtnUI();
-}
-
-function toggleHeroVoice() {
-  if (typeof toggleBowls === 'function') {
-    toggleBowls();
-  } else {
-    window.bowlsOn = !window.bowlsOn;
-  }
-  if (App && typeof App.updateHeroBtnUI === 'function') App.updateHeroBtnUI();
-}
-
-/* ═══ PWA INSTALL ═══ */
-function installApp() {
-  if (App && typeof App.installPWA === 'function') {
-    App.installPWA();
-  } else {
-    alert(t('installNotSupported') || 'Η εγκατάσταση δεν είναι διαθέσιμη αυτή τη στιγμή.');
-  }
-}
-
-/* ═══ TRIGGER WARNING OVERLAY ═══ */
-var _twPendingFile = null;
-function openTW(file, warnText) {
-  _twPendingFile = file;
-  const overlay = document.getElementById('tw-overlay');
-  const text = document.getElementById('tw-text');
-  if (text && warnText) text.textContent = warnText;
-  if (overlay) overlay.classList.add('active');
-}
-function closeTW() {
-  const overlay = document.getElementById('tw-overlay');
-  if (overlay) overlay.classList.remove('active');
-  _twPendingFile = null;
-}
-function confirmTW() {
-  const overlay = document.getElementById('tw-overlay');
-  if (overlay) overlay.classList.remove('active');
-  if (_twPendingFile && typeof launchPractice === 'function') {
-    launchPractice(_twPendingFile);
-  }
-  _twPendingFile = null;
 }
 
 function openLearningToRide() {
@@ -494,10 +267,7 @@ function showToast(msg, duration = 3000) {
 }
 
 // Initialize
-window.addEventListener('DOMContentLoaded', () => {
-    App.init();
-    if (typeof c2Init === 'function') c2Init();
-});
+window.addEventListener('DOMContentLoaded', () => App.init());
 
 /**
  * ═══ UI HELPERS ═══
@@ -539,10 +309,6 @@ function launchPractice(file) {
   const fab = document.getElementById('companion-fab');
   
   if (fab) fab.style.display = 'none';
-
-  if (typeof logMindfulAction === 'function') {
-    logMindfulAction('practice', { file });
-  }
 
   const sep = file.includes('?') ? '&' : '?';
   iframe.src = file + sep + 'lang=' + LANG;
