@@ -123,6 +123,10 @@ function toggleBowls() {
   else if (window.App && typeof window.App.updateHeroBtnUI === 'function') window.App.updateHeroBtnUI();
 }
 
+window.toggleBowls = toggleBowls;
+window.toggleAmbient = toggleAmbient;
+window.bowlsOn = bowlsOn;
+
 // Cleanup: remove mixed up toggleAmbient and provide a focus-based one if needed
 function toggleAmbient() { if(typeof toggleFocus === 'function') toggleFocus(); }
 
