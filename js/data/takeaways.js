@@ -32,3 +32,6 @@ var CHAPTER_TAKEAWAYS = {
 // Chapter → micro-dose category mapping
 var CHAPTER_MICRO_CAT = {1:'body',2:'breath',3:'attention',4:'space',5:'attention',6:'body',7:'breath',8:'space',9:'kindness',10:'body'};
 
+window.CHAPTER_TAKEAWAYS = CHAPTER_TAKEAWAYS;
+window.CHAPTER_MICRO_CAT = CHAPTER_MICRO_CAT;
+
